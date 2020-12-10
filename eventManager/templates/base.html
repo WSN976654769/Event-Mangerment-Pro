@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    {% include "html_reference.html" %}
+	</head>
+
+  <body class="bg">
+	  <div id="fh5co-page">
+		  <aside id="fh5co-aside" role="complementary" class="border js-fullheight">
+			  <a style="color: #1a1a1a;" href="/"><h1 id="fh5co-logo">EMP</h1></a>
+			  <nav id="fh5co-main-menu" role="navigation">
+				  <ul>
+					{% if username != None %}
+					<a href="{{url_for('profile')}}"><img src="{{user.url}}" class='img-circle' style="height:75px; width:75px"></a>
+                    <li><b>Welcome {{username}} !</b></li>
+					{% endif %}
+					<li id="home_page"><a href="/">Home</a></li>
+                    <li id="music_event"><a href="/music_event">MUSIC</a></li>
+					<li id="food_event"><a href="/food_event">FOOD & DRINK</a></li>
+					<li id="education_event"><a href="/education_event">EDUCATION</a></li>
+					<li id="company_event"><a href="/company_event">COMPANY</a></li>
+                    <li id="more_event"><a href="/more_event">MORE</a></li>
+
+
+                    <li><a href=#></a></li>
+					{% if username == None %}
+					<li><a href="sign_up">Sign up</a></li>
+					<li><a href="sign_in">Sign in</a></li>
+					{% else %}
+					<li><a href="my_bookings">My Bookings</a></li>
+					<li><a href="my_events">My Events</a></li>
+					<li><a href="logout">Log Out</a></li>
+					{% endif %}
+				</ul>
+			</nav>
+		</aside>
+	</div>
+
+	<style type="text/css">
+		.img-circle{
+			clip-path: circle();
+		}
+        .bg{
+            background: url("../static/img/bg.png");
+        }
+
+		
+	</style>
+
+  {% block content %}
+      {% endblock %}
+
+    </body>
+</html>
+
+

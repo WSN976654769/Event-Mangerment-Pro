@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+{% block content %}
+<title>My Event Page!</title>
+<link rel="stylesheet" href="{{url_for('static',filename='css/foundation.min.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/stylesheet.css')}}">
+
+    <div id="fh5co-main">
+        <div class="fh5co-narrow-content">
+            <h2 class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">My Events</h2>
+            <p style="color:red;">{{ msg }}</p>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#advertise">Advertise</button>
+            <br>
+            <br>
+
+            <div class="modal fade bd-example-modal-lg" id="advertise" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">Event Details</h4>
+                            <form id="form_data" action='/my_events' method='POST' enctype='multipart/form-data'>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" name="title" class="form-control" id="title" placeholder="Please enter event title" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="Description">Description</label>
+                                        <textarea class="form-control" name="description" id="Description" rows="3" placeholder="Please enter event description" required></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="type">Type</label>
+                                        <select class="form-control" name="tag" id="type" required>
+                                            <option value="">Select the type of event</option>
+                                            <option value="Music">Music</option>
+                                            <option value="Foods & Drinks">Foods & Drinks</option>
+                                            <option value="Education">Education</option>
+                                            <option value="Company">Company</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                      </div>
+
+                                    <div class="form-group">
+                                        <label for="venue">Venue</label>
+                                        <input type="text" name="venue" class="form-control" id="venue" placeholder="Please enter event venue" required>
+                                    </div>
+
+                                      <div class="form-group">
+                                        <label for="type">Venue Size</label>
+                                        <select class="form-control" name="capacity" id="type" required>
+                                            <option value="">Select the size of venue</option>
+                                            <option value="small">small (5*5)</option>
+                                            <option value="medium">medium (10*5)</option>
+                                            <option value="large">large (10*10)</option>
+                                        </select>
+                                      </div>
+
+                                    <div class="form-group">
+                                        <label for="startDate">Start Time</label>
+                                        <input type="datetime-local" name="start" class="form-control" id="startDate" placeholder="Please select the start date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endDate">End Time</label>
+                                        <input type="datetime-local" name="end" class="form-control" id="endDate" placeholder="Please select the end date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Price</label>
+                                        <input type="text" name="price" class="form-control" id="price" placeholder="Please enter the price for per ticket" required>
+                                    </div>                               
+
+
+
+                                    <div class="form-group">
+                                        <label>Upload Image</label>
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <span class="btn btn-default btn-file">
+                                                    Browse… <input type="file" name="file" id="imgInp" required>
+                                                 </span>
+                                            </span>
+                                        </div>
+                                        <img id='img-upload'/>
+                                    </div>
+                                </div>
+
+                                <center>
+                                    <button type="submit" onclick="check_date" class="btn btn-primary">Advertise</button>
+                                </center>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row row-bottom-padded-md">
+            <div class="row outterWrapper">
+            <div class="row content testimonials-page">
+            <div class="columns large-12  content-inner">
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#upcoming" data-toggle="tab">Upcoming Events</a>
+                    </li>
+                    <li>
+                        <a href="#cancel" data-toggle="tab">Cancelled Events</a>
+                    </li>
+                    <li>
+                        <a href="#finish" data-toggle="tab">Finished Events</a>
+                    </li>
+                </ul>
+                <div id="myTabContent" class="tab-content animate-box"  data-animate-effect="fadeInLeft">
+                    <div class="tab-pane fade in active" id="upcoming">
+                 {% for i in upcoming_event %}
+                <div class="row testimonial">
+                  <div class="columns large-3">
+                      <a href="{{url_for('book_event', id=i.id)}}" class="blog-img"><img src="{{ i.url }}" class="img-responsive"></a>
+                  </div>
+                  <div class="columns large-9">
+                    <div class="testimonial-credits">
+                        <p><b>{{i.status}}</b></p>
+                      </div>
+                      <p class="testimoial-text"><b>Event Title:</b> {{ i.title }} <br>
+                          <b>Event description</b>: {{ i.description[0:200] }}...<br><br>
+                          <b>Event Type</b>: {{ i.tags }} <br>
+                          <b>Event Venue</b>: {{ i.venue }} <br>
+                         <b> Start time</b>: {{ i.start_date }}<br>
+                          <b>End time</b>: {{ i.end_date }}
+                      </p>
+                          <!-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelModal">Cancel</button>
+                            <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <label><font size="3">Do you really want to cancel this event?</font></label>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-light" data-dismiss="modal">close</button>
+                                      <a href="/host_cancel?event_id={{i.id}}"><button class="btn btn-danger">yes</button></a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div> -->
+                        <a href="/host_cancel?event_id={{i.id}}"><button class="btn btn-danger">Cancel</button></a>
+                         <a href="{{url_for('send_email', id=i.id)}}" class="testimonial-credits">Want to send notification to attendees? </a>
+                  </div>
+                </div>
+                {% endfor %}
+                    </div>
+
+                <div class="tab-pane fade" id="cancel">
+                 {% for i in cancelled_event %}
+                <div class="row testimonial">
+                  <div class="columns large-3">
+                    <img src="{{ i.url }}" class="img-responsive">
+                  </div>
+                  <div class="columns large-9">
+                    <div class="testimonial-credits">
+                        <p><b>{{i.status}}</b></p>
+                      </div>
+                      <p class="testimoial-text"><b>Event Title:</b> {{ i.title }} <br>
+                          <b>Event description</b>: {{ i.description[0:200] }}...<br><br>
+                          <b>Event Type</b>: {{ i.tags }} <br>
+                          <b>Event Venue</b>: {{ i.venue }} <br>
+                         <b> Start time</b>: {{ i.start_date }}<br>
+                          <b>End time</b>: {{ i.end_date }}
+                      </p>
+                      <a href="/host_delete?event_id={{i.id}}"><button class="btn btn-danger">Delete</button></a>
+                       <a href="{{url_for('send_email', id=i.id)}}" class="testimonial-credits">Want to send notification to attendees? </a>
+                  </div>
+                </div>
+                {% endfor %}
+                </div>
+
+                <div class="tab-pane fade" id="finish">
+                    {% for i in finished_event %}
+                   <div class="row testimonial">
+                     <div class="columns large-3">
+                        <a href="{{url_for('book_event', id=i.id)}}" class="blog-img"><img src="{{ i.url }}" class="img-responsive"></a>
+                     </div>
+                     <div class="columns large-9">
+                       <div class="testimonial-credits">
+                           <p><b>{{i.status}}</b></p>
+                         </div>
+                         <p class="testimoial-text"><b>Event Title:</b> {{ i.title }} <br>
+                             <b>Event description</b>: {{ i.description[0:200] }}...<br><br>
+                             <b>Event Type</b>: {{ i.tags }} <br>
+                             <b>Event Venue</b>: {{ i.venue }} <br>
+                            <b> Start time</b>: {{ i.start_date }}<br>
+                             <b>End time</b>: {{ i.end_date }}
+                         </p>
+                         <a href="/host_delete?event_id={{i.id}}"><button class="btn btn-danger">Delete</button></a>
+                          <a href="{{url_for('send_email', id=i.id)}}" class="testimonial-credits">Want to send notification to attendees? </a>
+                     </div>
+                   </div>
+                   {% endfor %}
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready( function() {
+    	$(document).on('change', '.btn-file :file', function() {
+		var input = $(this),
+			label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+		});
+
+		$('.btn-file :file').on('fileselect', function(event, label) {
+
+		    var input = $(this).parents('.input-group').find(':text'),
+		        log = label;
+
+		    if( input.length ) {
+		        input.val(log);
+		    } else {
+		        if( log ) alert(log);
+		    }
+
+		});
+		function readURL(input) {
+		    if (input.files && input.files[0]) {
+		        var reader = new FileReader();
+
+		        reader.onload = function (e) {
+		            $('#img-upload').attr('src', e.target.result);
+		        }
+
+		        reader.readAsDataURL(input.files[0]);
+		    }
+		}
+
+		$("#imgInp").change(function(){
+		    readURL(this);
+		});
+	});
+</script>
+<style>
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+#img-upload{
+    width: 100%;
+}
+
+</style>
+{% endblock %}
+
+
