@@ -1,4 +1,4 @@
-This is an Event Management System, which is implemented by Python as backend and HTML, CSS, Flask and JavaScript as frontend
+Event Management System
 
 **Overall Instruction** 
 
