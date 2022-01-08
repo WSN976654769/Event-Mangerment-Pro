@@ -1,3 +1,5 @@
+This is an Event Management System, which is implemented by Python as backend and HTML, CSS, Flask and JavaScript as frontend
+
 **Overall Instruction** 
 
 Installation of our software takes 5 steps. 
